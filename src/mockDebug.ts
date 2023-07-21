@@ -92,13 +92,13 @@ export class MockDebugSession extends LoggingDebugSession {
    * Creates a new debug adapter that is used for one debug session.
    * We configure the default implementation of a debug adapter here.
    */
-  public constructor(fileAccessor: FileAccessor) {
+  public constructor(fileAccessor: FileAccessor, id?: string) {
     super("mock-debug.txt");
 
     this.setDebuggerLinesStartAt1(false);
     this.setDebuggerColumnsStartAt1(false);
 
-    this._runtime = new MockRuntime(fileAccessor);
+    this._runtime = new MockRuntime(fileAccessor, id ?? "");
 
     this._runtime.on("stopOnException", (exception) => {
       if (exception) {
@@ -273,7 +273,12 @@ export class MockDebugSession extends LoggingDebugSession {
 
     await this._configurationDone.wait(1000);
 
-    await this._runtime.start(args.program, !!args.stopOnEntry, !args.noDebug);
+    await this._runtime.start(
+      args.program,
+      !!args.stopOnEntry,
+      !args.noDebug,
+      this._extensionId
+    );
 
     if (args.compileError) {
       this.sendErrorResponse(response, {

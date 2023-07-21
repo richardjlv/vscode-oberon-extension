@@ -33,19 +33,12 @@
         "icon": "$(play)"
       },
       {
-        "command": "extension.oberon-language-server.toggleFormatting",
-        "title": "Toggle between decimal and hex formatting"
-      },
-      {
         "command": "extension.oberon-language-server.repl",
         "title": "Executar REPL"
       },
       {
-        "command": "extension.oberon-language-server.typeCheck"
-      },
-      {
         "command": "extension.oberon-language-server.typeChecker",
-        "title": "Executar Type Check"
+        "title": "Executar Type Check (Requer execução do Debug Oberon)"
       }
     ],
     "languages": [

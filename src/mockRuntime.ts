@@ -94,9 +94,10 @@ export class MockRuntime extends EventEmitter {
   private namedException: string | undefined;
   private otherExceptions = false;
   private terminal: vscode.Terminal =
+    vscode.window.terminals.find((t) => t.name === "Oberon Debug") ??
     vscode.window.createTerminal("Oberon Debug");
 
-  constructor(private fileAccessor: FileAccessor) {
+  constructor(private fileAccessor: FileAccessor, private id: string) {
     super();
   }
 
@@ -109,7 +110,11 @@ export class MockRuntime extends EventEmitter {
     debug: boolean
   ): Promise<void> {
     await this.loadSource(this.normalizePathAndCasing(program));
-    this.terminal.sendText("sbt compile && sbt test");
+
+    const dllPath = vscode.extensions.getExtension(this.id)?.extensionPath;
+    const commandToExecute = `java -jar ${dllPath}/oberon-lang-assembly-0.1.1.jar interpreter -i ${program}`;
+
+    this.terminal.sendText(commandToExecute);
   }
 
   public stop(): void {

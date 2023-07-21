@@ -258,7 +258,7 @@ class MockDebugAdapterNamedPipeServerDescriptorFactory
           ? join("\\\\.\\pipe\\", pipeName)
           : join(tmpdir(), pipeName);
       this.server = Net.createServer((socket) => {
-        const session = new MockDebugSession(workspaceFileAccessor);
+        const session = new MockDebugSession(workspaceFileAccessor, this.id);
         session.setRunAsServer(true);
         session.start(<NodeJS.ReadableStream>socket, socket);
       }).listen(pipePath);

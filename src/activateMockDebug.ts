@@ -114,7 +114,7 @@ export function activateMockDebug(
   );
 
   if (!factory) {
-    factory = new InlineDebugAdapterFactory();
+    factory = new InlineDebugAdapterFactory(context.extension.id);
   }
   context.subscriptions.push(
     vscode.debug.registerDebugAdapterDescriptorFactory("mock", factory)
@@ -186,11 +186,13 @@ function pathToUri(path: string) {
 class InlineDebugAdapterFactory
   implements vscode.DebugAdapterDescriptorFactory
 {
+  constructor(private extensionId: string) {}
+
   createDebugAdapterDescriptor(
     _session: vscode.DebugSession
   ): ProviderResult<vscode.DebugAdapterDescriptor> {
     return new vscode.DebugAdapterInlineImplementation(
-      new MockDebugSession(workspaceFileAccessor)
+      new MockDebugSession(workspaceFileAccessor, this.extensionId)
     );
   }
 }
