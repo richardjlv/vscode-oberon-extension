@@ -29,6 +29,11 @@ import { activateMockDebug, workspaceFileAccessor } from "./activateMockDebug";
 const runMode: "external" | "server" | "namedPipeServer" | "inline" = "inline";
 
 export function activate(context: vscode.ExtensionContext) {
+  const launchConfiguration = vscode.workspace.getConfiguration("launch");
+  const fileName = launchConfiguration.configurations[0].program
+    ?.split("/")
+    .pop();
+
   let complete = vscode.languages.registerCompletionItemProvider("oberon", {
     provideCompletionItems(
       document: vscode.TextDocument,
@@ -111,9 +116,7 @@ export function activate(context: vscode.ExtensionContext) {
     "extension.oberon-language-server.typeChecker",
     () => {
       if (vscode.debug.activeDebugSession) {
-        vscode.commands.executeCommand(
-          "extension.oberon-language-server.typeCheck"
-        );
+        handleTypeChecker(fileName);
       } else {
         vscode.window.showErrorMessage(
           "É necessário estar executando o 'Debug Oberon' para executar esse comando."
@@ -122,40 +125,40 @@ export function activate(context: vscode.ExtensionContext) {
     }
   );
 
-  let typeCheck = vscode.commands.registerCommand(
-    "extension.oberon-language-server.typeCheck",
-    () => {
-      const debugConsole = vscode.debug.activeDebugConsole;
+  const handleTypeChecker = (program: string) => {
+    const debugConsole = vscode.debug.activeDebugConsole;
 
-      const dllPath = vscode.extensions.getExtension(
-        context.extension.id
-      )?.extensionPath;
-      const commandToExecute = `java -jar ${dllPath}/oberon-lang-assembly-0.1.1.jar typeChecker -i ${vscode.workspace.rootPath}/main.oberon`;
+    const dllPath = vscode.extensions.getExtension(
+      context.extension.id
+    )?.extensionPath;
+    const commandToExecute = `java -jar ${dllPath}/oberon-lang-assembly-0.1.1.jar typeChecker -i ${vscode.workspace.rootPath}/${program}`;
 
-      exec(commandToExecute, (error, stdout, stderr) => {
-        if (error !== null) {
-          console.log(`Error: ${error}`);
-          debugConsole.appendLine(`${error}`);
-        } else {
-          console.log("stdout", stdout);
-          debugConsole.appendLine(stdout);
-        }
-      });
-    }
-  );
+    exec(commandToExecute, (error, stdout, stderr) => {
+      if (error !== null) {
+        console.log(`Error: ${error}`);
+        debugConsole.appendLine(
+          `Error in ${program}: ${error.message
+            .split(`${commandToExecute}\n`)
+            .pop()}`
+        );
+      } else {
+        console.log("stdout", stdout);
+        debugConsole.appendLine(stdout);
+      }
+    });
+  };
 
   vscode.workspace.onDidSaveTextDocument((event) => {
-    const launchConfiguration = vscode.workspace.getConfiguration("launch");
-    const fileName = launchConfiguration.configurations[0].program;
-
-    if (fileName.split("/").pop() === event.fileName.split("/").pop()) {
-      vscode.commands.executeCommand(
-        "extension.oberon-language-server.typeCheck"
-      );
+    const program = event.fileName.split("/").pop() ?? "";
+    if (
+      program.split(".").pop() === "oberon" &&
+      vscode.debug.activeDebugSession
+    ) {
+      handleTypeChecker(program);
     }
   });
 
-  context.subscriptions.push(complete, repl, typeCheck, typeChecker);
+  context.subscriptions.push(complete, repl, typeChecker);
 
   switch (runMode) {
     case "server":
