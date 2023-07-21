@@ -1,0 +1,248 @@
+{
+  "id": "oberon-language-server",
+  "name": "oberon-language-server",
+  "displayName": "Oberon Language Server",
+  "description": "",
+  "version": "0.0.1",
+  "license": "MIT",
+  "engines": {
+    "vscode": "^1.78.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+    "onCommand:extension.oberon-language-server.repl",
+    "onCommand:extension.oberon-language-server.typeChecker"
+  ],
+  "main": "./dist/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "extension.oberon-language-server.debugEditorContents",
+        "title": "Debug File",
+        "category": "Oberon Debug",
+        "enablement": "!inDebugMode",
+        "icon": "$(debug-alt)"
+      },
+      {
+        "command": "extension.oberon-language-server.runEditorContents",
+        "title": "Run File",
+        "category": "Oberon Debug",
+        "enablement": "!inDebugMode",
+        "icon": "$(play)"
+      },
+      {
+        "command": "extension.oberon-language-server.toggleFormatting",
+        "title": "Toggle between decimal and hex formatting"
+      },
+      {
+        "command": "extension.oberon-language-server.repl",
+        "title": "Executar REPL"
+      },
+      {
+        "command": "extension.oberon-language-server.typeCheck"
+      },
+      {
+        "command": "extension.oberon-language-server.typeChecker",
+        "title": "Executar Type Check"
+      }
+    ],
+    "languages": [
+      {
+        "id": "oberon",
+        "aliases": [
+          "Oberon",
+          "oberon"
+        ],
+        "extensions": [
+          ".oberon"
+        ],
+        "configuration": "./language-configuration.json"
+      }
+    ],
+    "grammars": [
+      {
+        "language": "oberon",
+        "scopeName": "source.oberon",
+        "path": "./syntaxes/oberon.tmLanguage.json"
+      }
+    ],
+    "debuggers": [
+      {
+        "type": "mock",
+        "languages": [
+          "oberon"
+        ],
+        "label": "Oberon Debug",
+        "program": "./out/debugAdapter.js",
+        "runtime": "node",
+        "configurationAttributes": {
+          "launch": {
+            "required": [
+              "program"
+            ],
+            "properties": {
+              "program": {
+                "type": "string",
+                "description": "Absolute path to a text file.",
+                "default": "${workspaceFolder}/${command:AskForProgramName}"
+              },
+              "stopOnEntry": {
+                "type": "boolean",
+                "description": "Automatically stop after launch.",
+                "default": false
+              },
+              "trace": {
+                "type": "boolean",
+                "description": "Enable logging of the Debug Adapter Protocol.",
+                "default": true
+              },
+              "compileError": {
+                "type": "string",
+                "description": "Simulates a compile error in 'launch' request.",
+                "enum": [
+                  "default",
+                  "show",
+                  "hide"
+                ],
+                "enumDescriptions": [
+                  "default: show fake compile error to user",
+                  "show fake compile error to user",
+                  "do not show fake compile error to user"
+                ]
+              }
+            }
+          },
+          "attach": {
+            "required": [
+              "program"
+            ],
+            "properties": {
+              "program": {
+                "type": "string",
+                "description": "Absolute path to a text file.",
+                "default": "${workspaceFolder}/${command:AskForProgramName}"
+              },
+              "stopOnEntry": {
+                "type": "boolean",
+                "description": "Automatically stop after attach.",
+                "default": false
+              },
+              "trace": {
+                "type": "boolean",
+                "description": "Enable logging of the Debug Adapter Protocol.",
+                "default": true
+              },
+              "compileError": {
+                "type": "string",
+                "description": "Simulates a compile error in 'attach' request.",
+                "enum": [
+                  "default",
+                  "show",
+                  "hide"
+                ],
+                "enumDescriptions": [
+                  "default: show fake compile error to user",
+                  "show fake compile error to user",
+                  "do not show fake compile error to user"
+                ]
+              }
+            }
+          }
+        },
+        "initialConfigurations": [
+          {
+            "type": "mock",
+            "request": "launch",
+            "name": "Ask for file name",
+            "program": "${workspaceFolder}/${command:AskForProgramName}",
+            "stopOnEntry": false
+          }
+        ],
+        "configurationSnippets": [
+          {
+            "label": "Oberon Debug: Launch",
+            "description": "A new configuration for 'debugging' a user selected oberon file.",
+            "body": {
+              "type": "mock",
+              "request": "launch",
+              "name": "Ask for file name",
+              "program": "^\"\\${workspaceFolder}/\\${command:AskForProgramName}\"",
+              "stopOnEntry": false
+            }
+          }
+        ],
+        "variables": {
+          "AskForProgramName": "extension.oberon-language-server.getProgramName"
+        }
+      }
+    ],
+    "menus": {
+      "editor/title/run": [
+        {
+          "command": "extension.oberon-language-server.runEditorContents",
+          "when": "resourceLangId == oberon",
+          "group": "navigation@1"
+        },
+        {
+          "command": "extension.oberon-language-server.debugEditorContents",
+          "when": "resourceLangId == oberon",
+          "group": "navigation@2"
+        }
+      ],
+      "commandPalette": [
+        {
+          "command": "extension.oberon-language-server.debugEditorContents",
+          "when": "resourceLangId == oberon"
+        },
+        {
+          "command": "extension.oberon-language-server.runEditorContents",
+          "when": "resourceLangId == oberon"
+        }
+      ],
+      "debug/variables/context": [
+        {
+          "command": "extension.oberon-language-server.toggleFormatting",
+          "when": "debugType == 'mock' && debugProtocolVariableMenuContext == 'simple'"
+        }
+      ]
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "yarn run package",
+    "compile": "webpack",
+    "watch": "webpack --watch",
+    "package": "webpack --mode production --devtool hidden-source-map",
+    "publish": "vsce publish",
+    "compile-tests": "tsc -p . --outDir out",
+    "watch-tests": "tsc -p . -w --outDir out",
+    "pretest": "yarn run compile-tests && yarn run compile && yarn run lint",
+    "lint": "eslint src --ext ts",
+    "test": "node ./out/test/runTest.js"
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.78.0",
+    "@types/glob": "^8.1.0",
+    "@types/mocha": "^10.0.1",
+    "@types/node": "16.x",
+    "@typescript-eslint/eslint-plugin": "^5.59.1",
+    "@typescript-eslint/parser": "^5.59.1",
+    "@vscode/debugadapter": "^1.56.0",
+    "@vscode/debugadapter-testsupport": "^1.56.0",
+    "await-notify": "^1.0.1",
+    "base64-js": "^1.5.1",
+    "eslint": "^8.39.0",
+    "glob": "^8.1.0",
+    "mocha": "^10.2.0",
+    "path-browserify": "^1.0.1",
+    "rimraf": "^3.0.2",
+    "typescript": "^5.0.4",
+    "ts-loader": "^9.4.2",
+    "url": "^0.11.0",
+    "vsce": "^2.7.0",
+    "webpack": "^5.81.0",
+    "webpack-cli": "^5.0.2",
+    "@vscode/test-electron": "^2.3.0"
+  }
+}

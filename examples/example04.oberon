@@ -1,0 +1,55 @@
+(* Linear Search program *)
+MODULE LinearSearch;
+IMPORT Out;
+
+PROCEDURE LinearSearch(arr: ARRAY OF INTEGER; key: INTEGER): INTEGER;
+VAR
+  i: INTEGER;
+BEGIN
+  FOR i := 0 TO LEN(arr) - 1 DO
+    IF arr[i] = key THEN
+      RETURN i;
+    END;
+  END;
+  RETURN -1;  (* Key not found *)
+END LinearSearch;
+
+PROCEDURE Run;
+VAR
+  arr: ARRAY 10 OF INTEGER;
+  key, index: INTEGER;
+  i: INTEGER;
+BEGIN
+  FOR i := 0 TO LEN(arr) - 1 DO
+    arr[i] := i;
+  END;
+
+  key := 7;
+  index := LinearSearch(arr, key);
+
+  Out.String("Array: ");
+  FOR i := 0 TO LEN(arr) - 1 DO
+    Out.Int(arr[i], 0);
+    Out.String(" ");
+  END;
+  Out.Ln;
+
+  IF index >= 0 THEN
+    Out.String("Key ");
+    Out.Int(key, 0);
+    Out.String(" found at index ");
+    Out.Int(index, 0);
+    Out.Ln;
+  ELSE
+    Out.String("Key ");
+    Out.Int(key, 0);
+    Out.String(" not found");
+    Out.Ln;
+  END;
+END Run;
+
+BEGIN
+  Run;
+END LinearSearch.
+
+POINTER

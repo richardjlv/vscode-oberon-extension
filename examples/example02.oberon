@@ -1,0 +1,36 @@
+(* Fibonacci program *)
+MODULE Fibonacci;
+IMPORT Out;
+
+PROCEDURE ComputeFibonacci(n: INTEGER): INTEGER;
+VAR
+  a, b, i, temp: INTEGER;
+BEGIN
+  a := 0;
+  b := 1;
+  FOR i := 2 TO n DO
+    temp := b;
+    b := a + b;
+    a := temp;
+  END;
+  RETURN b;
+END ComputeFibonacci;
+
+PROCEDURE Run;
+VAR
+  n: INTEGER;
+BEGIN
+  n := 10;
+  Out.String("Fibonacci Series up to ");
+  Out.Int(n, 0);
+  Out.Ln;
+  FOR i := 0 TO n DO
+    Out.Int(ComputeFibonacci(i), 0);
+    Out.String(" ");
+  END;
+  Out.Ln;
+END Run;
+
+BEGIN
+  Run;
+END Fibonacci.

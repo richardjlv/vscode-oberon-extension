@@ -1,0 +1,114 @@
+{
+	"$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+	"name": "Oberon",
+	"patterns": [
+		{
+			"include": "#keywords"
+		},
+		{
+			"include": "#strings"
+		},
+		{
+			"include": "#constants"
+		},
+		{
+			"include": "#comments"
+		},
+		{
+			"include": "#structs"
+		},
+		{
+			"include": "#types"
+		},
+		{
+			"include": "#operators"
+		},
+		{
+			"include": "#defaultLibrary"
+		}
+	],
+	"repository": {
+		"keywords": {
+			"patterns": [
+				{
+					"name": "keyword.control.oberon",
+					"match": "\\b(FOR|REPEAT|IF|ELSIF|UNTIL|WHILE|DO|ELSE|THEN|CASE|BY|RETURN|TO)\\b"
+				},
+				{
+					"name": "keyword.operator.oberon",
+					"match": "\\b(IS|DIV|MOD|OR|IN)\\b"
+				},
+				{
+					"name": "keyword.other.oberon",
+					"match": "\\b(IMPORT|BEGIN|TYPE|CONST|MODULE|VAR|PROCEDURE|END)\\b"
+				}
+			]
+		},
+		"strings": {
+			"patterns": [
+				{
+					"name": "string.quoted.double.oberon",
+					"begin": "\"",
+					"end": "\""
+				}
+			]
+		},
+		
+		"constants": {
+			"patterns": [
+				{
+					"name": "constant.numeric.oberon",
+					"match": "\\b(([0-9][0-9A-F]*[H])|([0-9]+[.][0-9]*([ED][+-]?[0-9]+)?)|([0-9]+))\\b"
+				},
+				{
+					"name": "constant.language.oberon",
+					"match": "\\b(FALSE|NIL|TRUE)\\b"
+				}
+			]
+		},
+		"comments": {
+			"patterns": [
+				{
+					"begin": "\\(\\*",
+					"captures": {
+						"0": {
+							"name": "punctuation.definition.comment.oberon"
+						}
+					},
+					"end": "\\*\\)",
+					"name": "comment.block.oberon"
+				}
+			]
+		},
+		"structs":{
+			"patterns": [
+				{
+					"name": "storage.type.struct.oberon",
+					"match": "\\b(POINTER|RECORD|ARRAY|MAP|OF)\\b"
+				}
+			]
+		},
+		"defaultLibrary":{
+			"patterns": [
+				{
+					"name": "support.type.oberon",
+					"match": "\\b(CHAR|REAL|BYTE|INTEGER|SET|BOOLEAN)\\b"
+				},
+				{
+					"name": "support.function.oberon",
+					"match": "\\b(ABS|ASR|CHR|FLT|INC|LSL|NEW|ROR|ASSERT|DEC|EXCL|FLOOR|INCL|LEN|ODD|ORD|PACK|UNPK|Out)\\b"
+				}
+			]
+		},
+		"types":{
+			"patterns": [
+				{
+					"name": "entity.name.type.oberon",
+					"match": "\\b(String|Int|Ln)\\b"
+				}
+			]
+		}
+	},
+	
+	"scopeName": "source.oberon"
+}

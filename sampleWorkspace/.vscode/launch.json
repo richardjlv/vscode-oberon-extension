@@ -1,0 +1,21 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "mock",
+      "request": "launch",
+      "name": "Debug Oberon",
+      "program": "${workspaceFolder}/main.oberon",
+      "stopOnEntry": true,
+      "trace": false
+    },
+    {
+      "type": "mock",
+      "request": "attach",
+      "name": "Attach Oberon",
+      "program": "${workspaceFolder}/main.oberon",
+      "stopOnEntry": true,
+      "trace": false
+    }
+  ]
+}

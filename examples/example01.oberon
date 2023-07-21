@@ -1,0 +1,13 @@
+(* Hello World program *)
+MODULE HelloWorld;
+IMPORT Out;
+
+PROCEDURE Run;
+BEGIN
+  Out.String("Hello, World!");
+  Out.Ln;
+END Run;
+
+BEGIN
+  Run;
+END HelloWorld.
