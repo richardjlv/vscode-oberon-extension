@@ -7,7 +7,13 @@
 
 ## Execução
 
-Para executar o código, basta abrir o projeto no Visual Studio Code e pressionar `F5` ou `Ctrl + F5` para executar debug. Alternativamente, você pode executar o comando `Debug: Start Debugging` no menu `Run and Debug`. Para a utilização da extensão, é necessário ter instalado o openjdk na versão "17.0.7" .
+Para executar o código, basta abrir o projeto no Visual Studio Code e pressionar `F5` ou `Ctrl + F5` para executar debug. Alternativamente, você pode executar o comando `Debug: Start Debugging` no menu `Run and Debug`. Para a utilização da extensão, é necessário ter instalado o openjdk na versão "17.0.7"  e realizar a configuração do arquivo `launch.json` para direcionar o diretório do arquivo oberon a ser executado/interpretado pela extensão. Na pasta sampleWorkspace, há um exemplo de configuração do arquivo `launch.json`.
+
+Para executar o REPL, basta pressionar `Ctrl + Shift + P` e digitar "Executar REPL" e pressionar `Enter`. Isso irá abrir uma nova janela com o REPL.
+
+Para iniciar a interpretação do programa, é necessário pressionar `F5` ou `Ctrl + F5` para executar debug, mesmo método para executar a extensão.
+
+Para executar o Type Checker, basta pressionar `Ctrl + Shift + P` e digitar "Executar Type Checker" e pressionar `Enter`. O Type Checker é executado no debug console. Para a execução do Type Checker, é necessário estar executando o programa em debug, visto que o debug console só é iniciado após executar o debug. Além disso, durante a execução do debug, todo arquivo oberon alterado e salvo apresentará a resposta ao Type Checker no debug console.
 
 ## Criação de uma nova extensão para o VSCode
 
