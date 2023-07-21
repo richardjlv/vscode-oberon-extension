@@ -1,5 +1,10 @@
 # Extensão do VSCode para Oberon.
 
+## Autores:
+
+- Matheus Santos Alves - 180025163
+- Richard Junio Lima Viana - 180077902
+
 ## Execução
 
 Para executar o código, basta abrir o projeto no Visual Studio Code e pressionar `F5` ou `Ctrl + F5` para executar debug. Alternativamente, você pode executar o comando `Debug: Start Debugging` no menu `Run and Debug`. Para a utilização da extensão, é necessário ter instalado o openjdk na versão "17.0.7" .
